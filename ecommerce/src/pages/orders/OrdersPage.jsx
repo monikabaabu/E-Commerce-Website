@@ -10,11 +10,11 @@ import { Fragment } from "react";
 export function OrdersPage({ cart }) {
   const [orders, setOrders] = useState([]);
   useEffect(() => {
-    const fetchOrders = async () => {
+    const fetchOrdersData = async () => {
     const response = await axios.get("/api/orders?expand=products");
       setOrders(response.data);
     }
-    fetchOrders();
+    fetchOrdersData();
   }, []);
   return (
     <>
