@@ -6,6 +6,9 @@ import './TrackingPage.css' ;
 import {Header} from '../components/Header' ;
 import { Link } from 'react-router';
 export function TrackingPage({cart}){
+  useEffect(() => {
+  document.title = "TrackingPage";
+}, []);
   const {orderId, productId} = useParams();
   const [order, setOrder] = useState(null);
   useEffect(()=>{
@@ -34,8 +37,7 @@ export function TrackingPage({cart}){
   const isDelivered = deliveryPercent === 100;
     return(
         <>
-         <title>Tracking</title>
-         <link rel="icon" type="image/svg+xml" href="tracking-favicon.png" />
+         
          <Header cart = {cart} />
  
 

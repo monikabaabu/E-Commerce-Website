@@ -111,3 +111,18 @@
     font-size: 24px;
   }
 }
+.auth-message {
+  text-align: center;
+
+  background-color: rgb(220, 252, 231);
+  color: rgb(8, 79, 45);
+
+  border: 1px solid rgb(8, 79, 45);
+  border-radius: 5px;
+
+  padding: 10px;
+  margin-bottom: 15px;
+
+  font-size: 14px;
+  font-weight: 500;
+}

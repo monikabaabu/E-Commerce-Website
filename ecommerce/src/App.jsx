@@ -1,35 +1,75 @@
-import { Routes, Route } from 'react-router'
-import {HomePage} from './pages/home/HomePage'
-import {CheckoutPage} from './pages/checkout/CheckoutPage'
-import {OrdersPage} from './pages/orders/OrdersPage'
-import {TrackingPage} from './pages/TrackingPage'
-import {NotFoundPage} from './pages/NotFoundPage'
-import { SignIn } from './pages/auth/SignIn';
-import './App.css'
-import { useState,useEffect } from 'react'
-import axios from 'axios'
-import { SignUp } from './pages/auth/SignUp';
+import { Routes, Route } from "react-router";
+import { HomePage } from "./pages/home/HomePage";
+import { CheckoutPage } from "./pages/checkout/CheckoutPage";
+import { OrdersPage } from "./pages/orders/OrdersPage";
+import { TrackingPage } from "./pages/TrackingPage";
+import { NotFoundPage } from "./pages/NotFoundPage";
+import { SignIn } from "./pages/auth/SignIn";
+import "./App.css";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { SignUp } from "./pages/auth/SignUp";
+import { LandingPage } from "./pages/LandingPage";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { WishlistPage } from "./pages/wishlist/WishlistPage";
 window.axios = axios;
 function App() {
   const [cart, setCart] = useState([]);
-   const loadCart = async () => {
+  const loadCart = async () => {
     const response = await axios.get("/api/cart-items?expand=product");
-        setCart(response.data);
-    };
+    setCart(response.data);
+  };
   useEffect(() => {
     loadCart();
   }, []);
   return (
     <Routes>
-      <Route index element={<HomePage cart={cart} loadCart={loadCart} />} />
-        <Route path="signup" element={<SignUp />} />
-        <Route path="signin" element={<SignIn />} />
-      <Route path="checkout" element={<CheckoutPage cart={cart} loadCart={loadCart} />} />
-      <Route path="orders" element={<OrdersPage cart={cart} loadCart= {loadCart} />} />
-      <Route path="tracking/:orderId/:productId" element={<TrackingPage cart = {cart} />} />
-      <Route path="*" element={<NotFoundPage  cart={cart}/>} />
+      <Route path="/" element={<LandingPage />} />
+      <Route
+        path="/home"
+        element={
+          <ProtectedRoute>
+            <HomePage cart={cart} loadCart={loadCart} />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/signin" element={<SignIn />} />
+      <Route
+        path="/wishlist"
+        element={
+          <ProtectedRoute>
+            <WishlistPage cart={cart} loadCart={loadCart} />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/checkout"
+        element={
+          <ProtectedRoute>
+            <CheckoutPage cart={cart} loadCart={loadCart} />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/orders"
+        element={
+          <ProtectedRoute>
+            <OrdersPage cart={cart} loadCart={loadCart} />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/tracking/:orderId/:productId"
+        element={
+          <ProtectedRoute>
+            <TrackingPage cart={cart} />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="*" element={<NotFoundPage cart={cart} />} />
     </Routes>
-  )
+  );
 }
 
-export default App
+export default App;

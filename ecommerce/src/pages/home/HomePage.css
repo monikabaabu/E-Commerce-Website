@@ -155,3 +155,55 @@
   height: 34px;
   margin-top: 1px;
 }
+.home-page .wishlist-button {
+  width: 100%;
+  margin-top: 8px;
+
+  padding: 8px;
+
+  border: 1px solid rgb(8, 79, 45);
+  border-radius: 6px;
+
+  background: white;
+  color: rgb(8, 79, 45);
+
+  cursor: pointer;
+}
+
+.home-page .wishlist-button:hover {
+  background-color: rgb(240, 255, 240);
+}
+.home-page .product-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.home-page .product-actions .add-to-cart-button {
+  flex: 1;
+}
+
+.home-page .wishlist-icon-button {
+  width: 42px;
+  height: 34px;
+
+  border: 1px solid rgb(8, 79, 45);
+  border-radius: 5px;
+
+  background: white;
+  cursor: pointer;
+
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.remove-button {
+  width: 90px;
+
+  border: none;
+  border-radius: 5px;
+
+  background: #dc3545;
+  color: white;
+
+  cursor: pointer;
+}

@@ -7,6 +7,9 @@ import { OrdersGrid } from "./OrdersGrid";
 export function OrdersPage({ cart , loadCart }) {
   const [orders, setOrders] = useState([]);
   useEffect(() => {
+  document.title = "Orders";
+}, []);
+  useEffect(() => {
     const fetchOrdersData = async () => {
     const response = await axios.get("/api/orders?expand=products");
       setOrders(response.data);
@@ -15,8 +18,7 @@ export function OrdersPage({ cart , loadCart }) {
   }, []);
   return (
     <>
-      <title>Orders</title>
-      <link rel="icon" type="image/svg+xml" href="orders-favicon.png" />
+      
       <Header cart={cart} />
 
       <div className="orders-page">

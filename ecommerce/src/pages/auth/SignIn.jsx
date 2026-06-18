@@ -2,19 +2,59 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { AuthHeader } from "../../components/AuthHeader";
 import "./SignUp.css";
+import axios from "axios";
+import { useNavigate } from "react-router";
+import { useEffect } from "react";
 
 export function SignIn() {
+    useEffect(() => {
+  document.title = "Sign In ";
+}, []);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
-  function handleSubmit(e) {
-    e.preventDefault();
+ async function handleSubmit(e) {
+  e.preventDefault();
 
-    console.log({
-      email,
-      password
-    });
+  if (!email || !password) {
+    alert("Please fill all fields");
+    return;
   }
+
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/api/auth/signin",
+      {
+        email,
+        password
+      }
+    );
+
+    console.log(response.data);
+
+    localStorage.setItem(
+      "token",
+      response.data.token
+    );
+    
+    localStorage.setItem(
+  "user",
+  JSON.stringify(response.data.user)
+);
+
+    setMessage("Login Successful");
+    setTimeout(() => {
+  navigate("/home");
+}, 1000);
+  } catch (error) {
+    setMessage(
+      error.response?.data?.message ||
+      "Login Failed"
+    );
+  }
+}
 
   return (
     <>
@@ -23,7 +63,11 @@ export function SignIn() {
       <div className="auth-page">
         <div className="auth-container">
           <h2 className="auth-title">Sign In</h2>
-
+            {message && (
+  <div className="auth-message">
+    {message}
+  </div>
+)}
           <form className="auth-form" onSubmit={handleSubmit}>
             <input
               className="auth-input"

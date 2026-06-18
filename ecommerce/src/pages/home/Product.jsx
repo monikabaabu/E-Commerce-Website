@@ -1,10 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { formatMoney } from "../../utils/money";
 import axios from "axios";
 import CheckmarkIcon from "../../assets/images/icons/checkmark.png";
-export function Product({product, loadCart}) {
+export function Product({product, loadCart, isWishlistPage, loadWishlist}) {
      const [quantity, setQuantity] = useState(1);
      const [showAddedMessage, setShowAddedMessage] = useState(false);
+     const [isWishlisted, setIsWishlisted] = useState(false);
+         const user = JSON.parse(
+  localStorage.getItem("user")
+);
+    
+     const checkWishlist = async () => {
+       console.log("Checking wishlist for", product.id);
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/api/wishlist/${user.id}`
+    );
+
+    const exists = response.data.some(
+      item => item.productId === product.id
+    );
+
+    setIsWishlisted(exists);
+
+  } catch (error) {
+    console.error(error);
+  }
+};
+      useEffect(() => {
+   checkWishlist();
+ }, [product.id]);
+
+console.log("USER:", user);
      const addToCart = async () => {
           await axios.post("/api/cart-items", {
             productId: product.id,
@@ -16,6 +43,52 @@ export function Product({product, loadCart}) {
                 setShowAddedMessage(false);
             }, 2000);
         };
+const toggleWishlist = async () => {
+  try {
+    if (isWishlisted) {
+      await axios.delete(
+        "http://localhost:3000/api/wishlist",
+        {
+          data: {
+            userId: user.id,
+            productId: product.id
+          }
+        }
+      );
+
+      setIsWishlisted(false);
+
+    } else {
+      await axios.post(
+        "http://localhost:3000/api/wishlist",
+        {
+          userId: user.id,
+          productId: product.id
+        }
+      );
+
+      setIsWishlisted(true);
+    }
+
+  } catch (error) {
+    console.error(error);
+  }
+};
+const removeFromWishlist = async () => {
+  await axios.delete(
+    "http://localhost:3000/api/wishlist",
+    {
+      data: {
+        userId: user.id,
+        productId: product.id
+      }
+    }
+  );
+
+  loadWishlist();
+};
+
+
         const selectQuantity = (event) => {
             const quantitySelected = Number(event.target.value);
             setQuantity(quantitySelected);
@@ -65,12 +138,31 @@ export function Product({product, loadCart}) {
         Added
       </div>
 
-      <button
-        className="add-to-cart-button button-primary"
-        data-testid="add-to-cart-button"
-        onClick={addToCart}>
-        Add to Cart
-      </button>
+      <div className="product-actions">
+  <button
+    className="add-to-cart-button button-primary"
+    data-testid="add-to-cart-button"
+    onClick={addToCart}
+  >
+    Add to Cart
+  </button>
+
+  {isWishlistPage ? (
+  <button
+    className="remove-button"
+    onClick={removeFromWishlist}
+  >
+    Remove
+  </button>
+) : (
+  <button
+    className="wishlist-icon-button"
+    onClick={toggleWishlist}
+  >
+    {isWishlisted ? "💚" : "♡"}
+  </button>
+)}
+</div>
     </div>
   );
 }

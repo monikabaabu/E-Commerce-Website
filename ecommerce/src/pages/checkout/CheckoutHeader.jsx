@@ -13,7 +13,7 @@ export function CheckoutHeader({cart}){
                 <div className="checkout-header">
       <div className="header-content">
         <div className="checkout-header-left-section">
-          <Link to="/">
+          <Link to="/home">
             <img className="logo" src={Logo} />
             <img className="mobile-logo" src={MobileLogo} />
           </Link>
@@ -21,7 +21,7 @@ export function CheckoutHeader({cart}){
 
         <div className="checkout-header-middle-section">
           Checkout (<Link className="return-to-home-link"
-            to="/"> {totalQuantity} items</Link>)
+            to="/home"> {totalQuantity} items</Link>)
         </div>
 
         <div className="checkout-header-right-section">

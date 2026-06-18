@@ -1,0 +1,54 @@
+.landing-page {
+  margin-top: 60px;
+  min-height: calc(100vh - 60px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgb(248, 248, 248);
+}
+
+.hero-section {
+  text-align: center;
+  max-width: 700px;
+  padding: 20px;
+}
+
+.hero-section h1 {
+  color: rgb(8, 79, 45);
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.hero-section p {
+  font-size: 20px;
+  color: rgb(90, 90, 90);
+  margin-bottom: 30px;
+}
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.hero-button {
+  background-color: rgb(8, 79, 45);
+  color: white;
+
+  text-decoration: none;
+
+  padding: 12px 24px;
+
+  border-radius: 6px;
+
+  font-weight: 600;
+}
+
+.hero-button.secondary {
+  background-color: white;
+  color: rgb(8, 79, 45);
+
+  border: 1px solid rgb(8, 79, 45);
+}

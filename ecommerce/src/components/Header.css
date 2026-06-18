@@ -16,13 +16,23 @@
 }
 
 .header .left-section {
-  width: 208px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 150px;
 }
 
 @media (max-width: 800px) {
   .header .left-section {
     width: unset;
   }
+}
+
+.user-name {
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .header .header-link {
@@ -44,7 +54,8 @@
 }
 
 .header .mobile-logo {
-  display: none;
+  display: block;
+  height: 26px;
 }
 
 @media (max-width: 675px) {
@@ -97,22 +108,29 @@
 }
 
 .header .right-section {
-  width: 180px;
+  min-width: 280px;
   flex-shrink: 0;
+
   display: flex;
-  justify-content: end;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 10px;
 }
 
-.header .orders-link {
+.header .nav-link {
   color: white;
 
   display: flex;
   align-items: center;
+
   padding-left: 13px;
   padding-right: 13px;
+
+  text-decoration: none;
 }
 
-.header .orders-link.active {
+.header .nav-link.active {
   text-decoration: underline;
 }
 
@@ -150,4 +168,21 @@
 
   width: 26px;
   text-align: center;
+}
+
+.logout-button {
+  background: transparent;
+  color: white;
+
+  border: 1px solid white;
+  border-radius: 4px;
+
+  padding: 6px 12px;
+  margin-left: 10px;
+
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: rgba(255,255,255,0.15);
 }

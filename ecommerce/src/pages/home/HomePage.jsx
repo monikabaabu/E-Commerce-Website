@@ -8,7 +8,9 @@ export function HomePage({ cart, loadCart }) {
   const [products, setProducts] = useState([]);
   const [searchParams] = useSearchParams();
   const search = searchParams.get("search");
-
+  useEffect(() => {
+  document.title = "Shoppie";
+}, []);
   useEffect( () => {
     const getHomeData = async () => {
       const urlPath = search? `/api/products?search=${search}` : '/api/products';
@@ -21,8 +23,6 @@ export function HomePage({ cart, loadCart }) {
 
   return (
     <>
-      <title>Ecommerce</title>
-      <link rel="icon" type="image/svg+xml" href="home-favicon.png" />
       <Header cart={cart} />
       <div className="home-page">
       <ProductsGrid products={products} loadCart={loadCart} />

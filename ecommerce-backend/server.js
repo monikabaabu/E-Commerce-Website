@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+import connectDB from "./config/db.js";
+
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
@@ -17,8 +20,11 @@ import { defaultProducts } from './defaultData/defaultProducts.js';
 import { defaultDeliveryOptions } from './defaultData/defaultDeliveryOptions.js';
 import { defaultCart } from './defaultData/defaultCart.js';
 import { defaultOrders } from './defaultData/defaultOrders.js';
+import wishlistRoutes from "./routes/wishlist.js";
 import fs from 'fs';
-
+import authRoutes from "./routes/auth.js";
+dotenv.config();
+await connectDB();
 const app = express();
 const PORT = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
@@ -32,7 +38,9 @@ app.use(express.json());
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Use routes
+app.use("/api/auth", authRoutes);
 app.use('/api/products', productRoutes);
+app.use("/api/wishlist", wishlistRoutes);
 app.use('/api/delivery-options', deliveryOptionRoutes);
 app.use('/api/cart-items', cartItemRoutes);
 app.use('/api/orders', orderRoutes);

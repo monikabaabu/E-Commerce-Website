@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import "./SignUp.css";
 import { AuthHeader } from "../../components/AuthHeader";
 import { Link } from "react-router";
 export function SignUp() {
+  useEffect(() => {
+  document.title = "Sign Up ";
+}, []);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,6 +16,15 @@ export function SignUp() {
   alert("Passwords do not match");
   return;
 }
+  if (!name || !email || !password || !confirmPassword) {
+  alert("Please fill all fields");
+  return;
+}
+if (password.length < 6) {
+  alert("Password must be at least 6 characters");
+  return;
+}
+
     console.log({
       name,
       email,
