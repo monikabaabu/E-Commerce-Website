@@ -1,10 +1,11 @@
 import express from "express";
 import Wishlist from "../models/Wishlist.js";
-
+import { authMiddleware } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
-router.post("/", async (req, res) => {
-  const { userId, productId } = req.body;
+router.post("/", authMiddleware, async (req, res) => {
+  const userId = req.user.userId;
+  const { productId } = req.body;
 
   const existing = await Wishlist.findOne({
     userId,
@@ -25,16 +26,17 @@ router.post("/", async (req, res) => {
   res.status(201).json(wishlistItem);
 });
 
-router.get("/:userId", async (req, res) => {
+router.get("/:userId", authMiddleware, async (req, res) => {
   const wishlist = await Wishlist.find({
-    userId: req.params.userId
+    userId: req.user.userId
   });
 
   res.json(wishlist);
 });
 
-router.delete("/", async (req, res) => {
-  const { userId, productId } = req.body;
+router.delete("/", authMiddleware, async (req, res) => {
+  const userId = req.user.userId;
+  const { productId } = req.body;
 
   await Wishlist.findOneAndDelete({
     userId,
@@ -45,5 +47,6 @@ router.delete("/", async (req, res) => {
     message: "Removed from wishlist"
   });
 });
+
 
 export default router;
