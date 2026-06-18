@@ -1,23 +1,44 @@
-.auth-header {
+.brand {
   background-color: rgb(8, 79, 45);
+  color: white;
 
   height: 60px;
+  padding: 0 20px;
 
   display: flex;
   align-items: center;
-  justify-content: center;
 
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-
-  z-index: 100;
+  z-index: 1000;
 }
 
-.auth-logo {
-  color: white;
+.brand .mobile-logo {
+  height: 28px;
+  width: auto;
+  margin-right: 10px;
+}
+
+.brand .brand-name {
   font-size: 28px;
-  font-weight: 700;
-  margin: 0;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+@media (max-width: 575px) {
+  .brand {
+    padding: 0 15px;
+  }
+
+  .brand .mobile-logo {
+    height: 24px;
+  }
+
+  .brand .brand-name {
+    font-size: 20px;
+  }
 }

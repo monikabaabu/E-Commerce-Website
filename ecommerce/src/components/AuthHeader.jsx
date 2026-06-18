@@ -1,9 +1,10 @@
 import "./AuthHeader.css";
-
+import MobileLogoWhite from "../assets/images/mobile-logo-white.png";
 export function AuthHeader() {
   return (
-    <header className="auth-header">
-      <h1 className="auth-logo">Shoppie</h1>
-    </header>
+    <div className="brand">
+      <img className="mobile-logo" src={MobileLogoWhite} alt="Shoppie Logo" />
+      <span className="brand-name">Shoppie</span>
+    </div>
   );
 }
