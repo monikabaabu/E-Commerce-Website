@@ -1,10 +1,11 @@
-import { useParams } from "react-router";
+import { useParams,Link } from "react-router";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import "./TrackingPage.css";
 import { Header } from "../components/Header";
-import { Link } from "react-router";
+import { getAuthHeaders } from "../utils/auth";
+import PropTypes from "prop-types";
 export function TrackingPage({ cart }) {
   useEffect(() => {
     document.title = "TrackingPage";
@@ -15,6 +16,9 @@ export function TrackingPage({ cart }) {
     const fetchTrackingData = async () => {
       const response = await axios.get(
         `/api/orders/${orderId}?expand=products`,
+        {
+          headers: getAuthHeaders()
+        }
       );
       setOrder(response.data);
     };
@@ -58,7 +62,7 @@ export function TrackingPage({ cart }) {
 
           <div className="product-info">Quantity: {orderProduct.quantity}</div>
 
-          <img className="product-image" src={orderProduct.product.image} />
+          <img className="product-image" src={orderProduct.product.image} alt={orderProduct.product.name} />
 
           <div className="progress-labels-container">
             <div
@@ -87,3 +91,6 @@ export function TrackingPage({ cart }) {
     </>
   );
 }
+TrackingPage.propTypes = {
+  cart: PropTypes.array.isRequired
+};

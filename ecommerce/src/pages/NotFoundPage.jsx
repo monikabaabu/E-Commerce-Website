@@ -1,6 +1,6 @@
 import { Header } from "../components/Header";
 import "./NotFoundPage.css";
-
+import PropTypes from "prop-types";
 export function NotFoundPage({ cart }) {
   useEffect(() => {
     document.title = "404";
@@ -18,3 +18,7 @@ export function NotFoundPage({ cart }) {
     </>
   );
 }
+
+NotFoundPage.propTypes = {
+  cart: PropTypes.array.isRequired
+};

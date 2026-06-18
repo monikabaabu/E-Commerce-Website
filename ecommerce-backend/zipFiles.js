@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import archiver from 'archiver';
 
 const outputDir = path.resolve('./');
@@ -9,7 +9,7 @@ const zipFilePrefix = 'ecommerce-backend-';
 const getNextZipId = () => {
   const files = fs.readdirSync(outputDir);
   const zipFiles = files.filter(file => file.startsWith(zipFilePrefix) && file.endsWith('.zip'));
-  const ids = zipFiles.map(file => parseInt(file.replace(zipFilePrefix, '').replace('.zip', ''), 10)).filter(Number.isInteger);
+  const ids = zipFiles.map(file => Number.parseInt(file.replace(zipFilePrefix, '').replace('.zip', ''), 10)).filter(Number.isInteger);
   return ids.length > 0 ? Math.max(...ids) + 1 : 1;
 };
 

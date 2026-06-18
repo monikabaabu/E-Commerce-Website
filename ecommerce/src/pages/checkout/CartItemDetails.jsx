@@ -2,6 +2,7 @@ import { formatMoney } from "../../utils/money";
 import axios from "axios";
 import { useState } from "react";
 import { getAuthHeaders } from "../../utils/auth";
+import PropTypes from "prop-types";
 export function CartItemDetails({ cartItem, loadCart }) {
   const [isUpdatingQuantity, setIsUpdatingQuantity] = useState(false);
   const [quantity, setQuantity] = useState(cartItem.quantity);
@@ -44,7 +45,7 @@ export function CartItemDetails({ cartItem, loadCart }) {
 
   return (
     <>
-      <img className="product-image" src={cartItem.product.image} />
+      <img className="product-image" src={cartItem.product.image} alt={cartItem.product.name} />
       <div className="cart-item-details">
         <div className="product-name">{cartItem.product.name}</div>
         <div className="product-price">
@@ -65,20 +66,26 @@ export function CartItemDetails({ cartItem, loadCart }) {
               <span className="quantity-label">{cartItem.quantity}</span>
             )}
           </span>
-          <span
+          <button
+            type="button"
             className="update-quantity-link link-primary"
             onClick={updateQuantity}
           >
             Update
-          </span>
-          <span
+          </button>
+          <button
+            type="button"
             className="delete-quantity-link link-primary"
             onClick={deleteCartItem}
           >
             Delete
-          </span>
+          </button>
         </div>
       </div>
     </>
   );
 }
+CartItemDetails.propTypes = {
+  cartItem: PropTypes.object.isRequired,
+  loadCart: PropTypes.func.isRequired
+};

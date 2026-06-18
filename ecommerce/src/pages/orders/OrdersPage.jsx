@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router";
 import "./OrdersPage.css";
 import { Header } from "../../components/Header";
 import { OrdersGrid } from "./OrdersGrid";
 import { getAuthHeaders } from "../../utils/auth";
+import PropTypes from "prop-types";
 export function OrdersPage({ cart, loadCart }) {
   const [orders, setOrders] = useState([]);
   useEffect(() => {
@@ -34,3 +34,7 @@ export function OrdersPage({ cart, loadCart }) {
     </>
   );
 }
+OrdersPage.propTypes = {
+  cart: PropTypes.array.isRequired,
+  loadCart: PropTypes.func.isRequired
+};

@@ -1,7 +1,6 @@
 import "./CheckoutHeader.css";
 import { Link } from "react-router";
 import CheckoutLockIcon from "../../assets/images/icons/checkout-lock-icon.png";
-import Logo from "../../assets/images/logo.png";
 import MobileLogo from "../../assets/images/mobile-logo.png";
 export function CheckoutHeader({ cart }) {
   let totalQuantity = 0;
@@ -13,9 +12,10 @@ export function CheckoutHeader({ cart }) {
     <div className="checkout-header">
       <div className="header-content">
         <div className="checkout-header-left-section">
-          <Link to="/home">
-            <img className="logo" src={Logo} />
-            <img className="mobile-logo" src={MobileLogo} />
+          <Link to="/home" className="brand-container">
+            
+            <img className="mobile-logo" src={MobileLogo} alt="Mobile Logo"/>
+             <span className="brand-name">Shoppie</span>
           </Link>
         </div>
 

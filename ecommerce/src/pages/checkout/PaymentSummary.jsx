@@ -2,6 +2,7 @@ import { formatMoney } from "../../utils/money";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { getAuthHeaders } from "../../utils/auth";
+import PropTypes from "prop-types";
 export function PaymentSummary({ paymentSummary, loadCart }) {
   const navigate = useNavigate();
   const createOrder = async () => {
@@ -67,3 +68,14 @@ export function PaymentSummary({ paymentSummary, loadCart }) {
     </div>
   );
 }
+PaymentSummary.propTypes = {
+  paymentSummary: PropTypes.shape({
+    totalItems: PropTypes.number,
+    productCostCents: PropTypes.number,
+    shippingCostCents: PropTypes.number,
+    totalCostBeforeTaxCents: PropTypes.number,
+    taxCents: PropTypes.number,
+    totalCostCents: PropTypes.number,
+  }),
+  loadCart: PropTypes.func.isRequired,
+};

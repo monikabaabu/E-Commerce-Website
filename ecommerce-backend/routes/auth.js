@@ -15,14 +15,12 @@ router.post("/signup", async (req, res) => {
         message: "User already exists"
       });
     }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-const user = new User({
-  name,
-  email,
-  password: hashedPassword
-});
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({
+      name,
+      email,
+      password: hashedPassword
+    });
 
     await user.save();
 

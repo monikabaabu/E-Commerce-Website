@@ -13,7 +13,7 @@ import { LandingPage } from "./pages/LandingPage";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { WishlistPage } from "./pages/wishlist/WishlistPage";
 import { getAuthHeaders } from "./utils/auth";
-window.axios = axios;
+globalThis.axios = axios;
 function App() {
   const [cart, setCart] = useState([]);
 const loadCart = async () => {

@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { formatMoney } from "../../utils/money";
+import PropTypes from "prop-types";
 export function OrderHeader({ order }) {
   return (
     <div className="order-header">
@@ -21,3 +22,10 @@ export function OrderHeader({ order }) {
     </div>
   );
 }
+OrderHeader.propTypes = {
+  order: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    orderTimeMs: PropTypes.number.isRequired,
+    totalCostCents: PropTypes.number.isRequired
+  }).isRequired
+};

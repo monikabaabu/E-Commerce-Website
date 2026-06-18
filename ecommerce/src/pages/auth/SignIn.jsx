@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { AuthHeader } from "../../components/AuthHeader";
 import "./SignUp.css";
 import axios from "axios";
-import { useNavigate } from "react-router";
-import { useEffect } from "react";
+
 
 export function SignIn() {
   useEffect(() => {
@@ -13,7 +12,6 @@ export function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -31,16 +29,12 @@ export function SignIn() {
           password,
         },
       );
-
-      // console.log(response.data);
-
       localStorage.setItem("token", response.data.token);
-
       localStorage.setItem("user", JSON.stringify(response.data.user));
 
       setMessage("Login Successful");
       setTimeout(() => {
-        window.location.href = "/home";
+        globalThis.location.href = "/home";
       }, 1000);
     } catch (error) {
       setMessage(error.response?.data?.message || "Login Failed");

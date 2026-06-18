@@ -1,9 +1,9 @@
 import { NavLink, useNavigate, useSearchParams } from "react-router";
 import CartIcon from "../assets/images/icons/cart-icon.png";
 import SearchIcon from "../assets/images/icons/search-icon.png";
-import LogoWhite from "../assets/images/logo-white.png";
 import MobileLogoWhite from "../assets/images/mobile-logo-white.png";
 import { useState } from "react";
+import PropTypes from "prop-types";
 import "./Header.css";
 export function Header({ cart }) {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ export function Header({ cart }) {
   return (
     <div className="header">
       <div className="left-section">
-        <img className="mobile-logo" src={MobileLogoWhite} />
+        <img className="mobile-logo" src={MobileLogoWhite} alt="Logo"/>
 
         {user && <div className="user-name">Hello, {user.name} !</div>}
       </div>
@@ -44,7 +44,7 @@ export function Header({ cart }) {
         />
 
         <button className="search-button" onClick={searchProducts}>
-          <img className="search-icon" src={SearchIcon} />
+          <img className="search-icon" src={SearchIcon} alt="Search" />
         </button>
       </div>
 
@@ -61,7 +61,7 @@ export function Header({ cart }) {
         </NavLink>
 
         <NavLink className="cart-link header-link" to="/checkout">
-          <img className="cart-icon" src={CartIcon} />
+          <img className="cart-icon" src={CartIcon} alt="Cart" />
           <div className="cart-quantity">{totalQuantity}</div>
           <div className="cart-text">Cart</div>
         </NavLink>
@@ -72,3 +72,6 @@ export function Header({ cart }) {
     </div>
   );
 }
+Header.propTypes = {
+  cart: PropTypes.array.isRequired,
+};

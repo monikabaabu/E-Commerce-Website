@@ -5,6 +5,7 @@ import { Header } from "../../components/Header";
 import { ProductsGrid } from "./ProductsGrid";
 import { useSearchParams } from "react-router";
 import { getAuthHeaders } from "../../utils/auth";
+import PropTypes from "prop-types";
 export function HomePage({ cart, loadCart }) {
   const [products, setProducts] = useState([]);
   const [searchParams] = useSearchParams();
@@ -67,3 +68,7 @@ useEffect(() => {
     </>
   );
 }
+HomePage.propTypes = {
+  cart: PropTypes.array.isRequired,
+  loadCart: PropTypes.func.isRequired
+};

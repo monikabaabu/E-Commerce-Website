@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import PropTypes from "prop-types";
 export function DeliveryDate({ cartItem, deliveryOptions }) {
   const selectedDeliveryOption = deliveryOptions.find((deliveryOption) => {
     return deliveryOption.id === cartItem.deliveryOptionId;
@@ -12,3 +13,7 @@ export function DeliveryDate({ cartItem, deliveryOptions }) {
     </div>
   );
 }
+DeliveryDate.propTypes = {
+  cartItem: PropTypes.object.isRequired,
+  deliveryOptions: PropTypes.array.isRequired
+};

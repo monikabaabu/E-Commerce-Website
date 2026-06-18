@@ -1,6 +1,7 @@
 import { CartItemDetails } from "./CartItemDetails";
 import { DeliveryOptions } from "./DeliveryOptions";
 import { DeliveryDate } from "./DeliveryDate";
+import PropTypes from "prop-types";
 export function OrderSummary({ cart, deliveryOptions, loadCart }) {
   return (
     <div className="order-summary">
@@ -26,3 +27,8 @@ export function OrderSummary({ cart, deliveryOptions, loadCart }) {
     </div>
   );
 }
+OrderSummary.propTypes = {
+  cart: PropTypes.array.isRequired,
+  deliveryOptions: PropTypes.array.isRequired,
+  loadCart: PropTypes.func.isRequired
+};

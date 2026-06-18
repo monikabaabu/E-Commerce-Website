@@ -23,8 +23,9 @@ router.get('/', authMiddleware, async (req, res) => {
           product: productDetails
         };
       }));
+      const orderData = order.toJSON();
       return {
-        ...order.toJSON(),
+        ...orderData,
         products
       };
     }));

@@ -1,5 +1,6 @@
 import { OrderHeader } from "./OrderHeader";
 import { OrderDetailsGrid } from "./OrderDetailsGrid";
+import PropTypes from "prop-types";
 export function OrdersGrid({ orders, loadCart }) {
   return (
     <div className="orders-grid">
@@ -14,3 +15,8 @@ export function OrdersGrid({ orders, loadCart }) {
     </div>
   );
 }
+
+OrdersGrid.propTypes = {
+  orders: PropTypes.array.isRequired,
+  loadCart: PropTypes.func.isRequired
+};

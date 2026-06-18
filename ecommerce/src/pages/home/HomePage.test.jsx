@@ -1,7 +1,6 @@
 import { it, expect, describe, vi, beforeEach } from "vitest";
 import { HomePage } from "./HomePage";
 import { render, screen, within } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import axios from "axios";
 import { MemoryRouter } from "react-router";
 vi.mock("axios");
@@ -43,7 +42,7 @@ describe("HomePage component", () => {
   it("displays the products correctly", async () => {
     render(
       <MemoryRouter>
-        <HomePage cart={[]} loadcart={loadCart} />
+        <HomePage cart={[]} loadCart={loadCart} />
       </MemoryRouter>,
     );
     const productContainers = await screen.findAllByTestId("product-container");

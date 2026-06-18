@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { getAuthHeaders } from "../../utils/auth";
 import BuyAgainIcon from "../../assets/images/icons/buy-again.png";
 import axios from "axios";
+import PropTypes from "prop-types";
 export function OrderDetailsGrid({ order, loadCart }) {
   return (
     <div className="order-details-grid">
@@ -24,7 +25,7 @@ export function OrderDetailsGrid({ order, loadCart }) {
         return (
           <Fragment key={orderProduct.product.id}>
             <div className="product-image-container">
-              <img src={orderProduct.product.image} />
+              <img src={orderProduct.product.image} alt={orderProduct.product.name} />
             </div>
 
             <div className="product-details">
@@ -40,7 +41,7 @@ export function OrderDetailsGrid({ order, loadCart }) {
                 className="buy-again-button button-primary"
                 onClick={addToCart}
               >
-                <img className="buy-again-icon" src={BuyAgainIcon} />
+                <img className="buy-again-icon" src={BuyAgainIcon} alt="Buy Again" />
                 <span className="buy-again-message">Buy Again</span>
               </button>
             </div>
@@ -58,3 +59,7 @@ export function OrderDetailsGrid({ order, loadCart }) {
     </div>
   );
 }
+OrderDetailsGrid.propTypes = {
+  order: PropTypes.object.isRequired,
+  loadCart: PropTypes.func.isRequired
+};

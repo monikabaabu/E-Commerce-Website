@@ -143,9 +143,22 @@
   display: grid;
   grid-template-columns: 24px 1fr;
   margin-bottom: 12px;
+
+  width: 100%;
+  text-align: left;
+
+  background: none;
+  border: none;
+  padding: 0;
+
   cursor: pointer;
+  font: inherit;
 }
 
+.checkout-page .delivery-option:focus {
+  outline: 2px solid rgb(25, 135, 84);
+  border-radius: 4px;
+}
 .checkout-page .delivery-option-input {
   margin: 3px 5px 0px 0px;
   cursor: pointer;
@@ -212,4 +225,30 @@
 
 .quantity-textbox {
   width: 50px;
+}
+
+.update-quantity-link,
+.delete-quantity-link {
+  background-color: rgb(25, 135, 84);
+  color: white;
+
+  border: none;
+  border-radius: 4px;
+
+  padding: 6px 12px;
+  margin-left: 8px;
+
+  cursor: pointer;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.update-quantity-link:hover,
+.delete-quantity-link:hover {
+  background-color: rgb(20, 110, 70);
+}
+
+.update-quantity-link:active,
+.delete-quantity-link:active {
+  background-color: rgb(15, 90, 55);
 }

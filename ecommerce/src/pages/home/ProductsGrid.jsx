@@ -1,5 +1,5 @@
 import { Product } from "./Product";
-
+import PropTypes from "prop-types";
 export function ProductsGrid({
   products,
   loadCart,
@@ -25,3 +25,10 @@ export function ProductsGrid({
     </div>
   );
 }
+ProductsGrid.propTypes = {
+  products: PropTypes.array.isRequired,
+  loadCart: PropTypes.func.isRequired,
+  wishlistIds: PropTypes.array,
+  isWishlistPage: PropTypes.bool,
+  loadWishlist: PropTypes.func
+};

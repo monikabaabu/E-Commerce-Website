@@ -2,6 +2,7 @@ import { formatMoney } from "../../utils/money";
 import dayjs from "dayjs";
 import axios from "axios";
 import { getAuthHeaders } from "../../utils/auth";
+import PropTypes from "prop-types";
 export function DeliveryOptions({ deliveryOptions, cartItem, loadCart }) {
   return (
     <div className="delivery-options">
@@ -25,11 +26,12 @@ export function DeliveryOptions({ deliveryOptions, cartItem, loadCart }) {
         };
 
         return (
-          <div
-            key={deliveryOption.id}
-            className="delivery-option"
-            onClick={updateDeliveryOption}
-          >
+            <button
+              key={deliveryOption.id}
+              type="button"
+              className="delivery-option"
+              onClick={updateDeliveryOption}
+            >
             <input
               type="radio"
               checked={deliveryOption.id === cartItem.deliveryOptionId}
@@ -45,9 +47,14 @@ export function DeliveryOptions({ deliveryOptions, cartItem, loadCart }) {
               </div>
               <div className="delivery-option-price">{priceString}</div>
             </div>
-          </div>
+          </button>
         );
       })}
     </div>
   );
 }
+DeliveryOptions.propTypes = {
+  deliveryOptions: PropTypes.array.isRequired,
+  cartItem: PropTypes.object.isRequired,
+  loadCart: PropTypes.func.isRequired
+};

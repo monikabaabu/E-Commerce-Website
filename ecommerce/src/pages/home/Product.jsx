@@ -3,6 +3,7 @@ import { formatMoney } from "../../utils/money";
 import axios from "axios";
 import { getAuthHeaders } from "../../utils/auth";
 import CheckmarkIcon from "../../assets/images/icons/checkmark.png";
+import PropTypes from "prop-types";
 export function Product({ product, loadCart, wishlistIds = [], isWishlistPage, loadWishlist }) {
   const [quantity, setQuantity] = useState(1);
   const [showAddedMessage, setShowAddedMessage] = useState(false);
@@ -91,6 +92,7 @@ useEffect(() => {
           className="product-image"
           data-testid="product-image"
           src={product.image}
+          alt={product.name}
         />
       </div>
 
@@ -101,6 +103,7 @@ useEffect(() => {
           className="product-rating-stars"
           data-testid="product-rating-stars"
           src={`images/ratings/rating-${product.rating.stars * 10}.png`}
+          alt={`Rating: ${product.rating.stars} out of 5`}
         />
         <div className="product-rating-count link-primary">
           {product.rating.count}
@@ -130,7 +133,7 @@ useEffect(() => {
         className="added-to-cart"
         style={{ opacity: showAddedMessage ? 1 : 0 }}
       >
-        <img src={CheckmarkIcon} />
+        <img src={CheckmarkIcon} alt=""/>{" "}
         Added
       </div>
 
@@ -155,4 +158,11 @@ useEffect(() => {
       </div>
     </div>
   );
+}
+Product.propTypes = {
+  product: PropTypes.object.isRequired,
+  loadCart: PropTypes.func.isRequired,
+  wishlistIds: PropTypes.array,
+  isWishlistPage: PropTypes.bool,
+  loadWishlist: PropTypes.func
 }

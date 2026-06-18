@@ -1,11 +1,11 @@
 import { CheckoutHeader } from "./CheckoutHeader";
 import "./CheckoutPage.css";
 import axios from "axios";
-import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { OrderSummary } from "./OrderSummary";
 import { PaymentSummary } from "./PaymentSummary";
 import { getAuthHeaders } from "../../utils/auth";
+import PropTypes from "prop-types";
 export function CheckoutPage({ cart, loadCart }) {
   const [deliveryOptions, setDeliveryOptions] = useState([]);
   const [paymentSummary, setPaymentSummary] = useState(null);
@@ -52,3 +52,7 @@ export function CheckoutPage({ cart, loadCart }) {
     </>
   );
 }
+CheckoutPage.propTypes = {
+  cart: PropTypes.array.isRequired,
+  loadCart: PropTypes.func.isRequired
+};

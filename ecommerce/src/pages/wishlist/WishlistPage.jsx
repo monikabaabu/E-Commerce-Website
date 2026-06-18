@@ -3,6 +3,7 @@ import axios from "axios";
 import { Header } from "../../components/Header";
 import { ProductsGrid } from "../home/ProductsGrid";
 import { getAuthHeaders } from "../../utils/auth";
+import PropTypes from "prop-types";
 export function WishlistPage({ cart, loadCart }) {
   const [wishlistProducts, setWishlistProducts] = useState([]);
 
@@ -51,3 +52,8 @@ export function WishlistPage({ cart, loadCart }) {
     </>
   );
 }
+
+WishlistPage.propTypes = {
+  cart: PropTypes.array.isRequired,
+  loadCart: PropTypes.func.isRequired
+};
