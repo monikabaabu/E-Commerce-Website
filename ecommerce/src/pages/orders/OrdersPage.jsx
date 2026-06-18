@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import "./OrdersPage.css";
 import { Header } from "../../components/Header";
 import { OrdersGrid } from "./OrdersGrid";
+import { getAuthHeaders } from "../../utils/auth";
 export function OrdersPage({ cart, loadCart }) {
   const [orders, setOrders] = useState([]);
   useEffect(() => {
@@ -11,11 +12,16 @@ export function OrdersPage({ cart, loadCart }) {
   }, []);
   useEffect(() => {
     const fetchOrdersData = async () => {
-      const response = await axios.get("/api/orders?expand=products");
+      const response = await axios.get(
+  "/api/orders?expand=products",
+  {
+    headers: getAuthHeaders()
+  }
+);
       setOrders(response.data);
     };
     fetchOrdersData();
-  }, []);
+  }, []); 
   return (
     <>
       <Header cart={cart} />

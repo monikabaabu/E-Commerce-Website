@@ -1,10 +1,18 @@
 import { formatMoney } from "../../utils/money";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { getAuthHeaders } from "../../utils/auth";
 export function PaymentSummary({ paymentSummary, loadCart }) {
   const navigate = useNavigate();
   const createOrder = async () => {
-    await axios.post("/api/orders");
+  
+  await axios.post(
+    "/api/orders",
+    {},
+    {
+      headers: getAuthHeaders()
+    }
+  );
     await loadCart();
     navigate("/orders");
   };

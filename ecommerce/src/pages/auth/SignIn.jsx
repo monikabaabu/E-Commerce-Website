@@ -40,7 +40,7 @@ export function SignIn() {
 
       setMessage("Login Successful");
       setTimeout(() => {
-        navigate("/home");
+        window.location.href = "/home";
       }, 1000);
     } catch (error) {
       setMessage(error.response?.data?.message || "Login Failed");

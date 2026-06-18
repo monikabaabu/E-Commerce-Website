@@ -126,3 +126,9 @@
   font-size: 14px;
   font-weight: 500;
 }
+.auth-error {
+  color: #dc2626;
+  font-size: 14px;
+  margin-bottom: 12px;
+  text-align: left;
+}

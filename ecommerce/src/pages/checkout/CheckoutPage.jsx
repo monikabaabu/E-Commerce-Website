@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { OrderSummary } from "./OrderSummary";
 import { PaymentSummary } from "./PaymentSummary";
+import { getAuthHeaders } from "../../utils/auth";
 export function CheckoutPage({ cart, loadCart }) {
   const [deliveryOptions, setDeliveryOptions] = useState([]);
   const [paymentSummary, setPaymentSummary] = useState(null);
@@ -22,7 +23,12 @@ export function CheckoutPage({ cart, loadCart }) {
   }, []);
   useEffect(() => {
     const fetchPaymentSummary = async () => {
-      const response = await axios.get("/api/payment-summary");
+      const response = await axios.get(
+  "/api/payment-summary",
+  {
+    headers: getAuthHeaders()
+  }
+);
       setPaymentSummary(response.data);
     };
     fetchPaymentSummary();

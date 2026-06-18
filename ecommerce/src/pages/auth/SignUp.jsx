@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import "./SignUp.css";
 import { AuthHeader } from "../../components/AuthHeader";
 import { Link } from "react-router";
+import axios from "axios";
+import { useNavigate } from "react-router";
 export function SignUp() {
   useEffect(() => {
     document.title = "Sign Up ";
@@ -10,27 +12,48 @@ export function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  function handleSubmit(e) {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      alert("Passwords do not match");
-      return;
-    }
-    if (!name || !email || !password || !confirmPassword) {
-      alert("Please fill all fields");
-      return;
-    }
-    if (password.length < 6) {
-      alert("Password must be at least 6 characters");
-      return;
-    }
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-    console.log({
-      name,
-      email,
-      password,
-    });
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
+
+  if (!name || !email || !password || !confirmPassword) {
+    setError("Please fill all fields");
+    return;
   }
+
+  if (password.length < 6) {
+    setError("Password must be at least 6 characters");
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    setError("Passwords do not match");
+    return;
+  }
+
+  try {
+    await axios.post(
+      "http://localhost:3000/api/auth/signup",
+      {
+        name,
+        email,
+        password
+      }
+    );
+    localStorage.removeItem("token");
+localStorage.removeItem("user");
+    navigate("/signin");
+
+  } catch (error) {
+    setError(
+      error.response?.data?.message ||
+      "Failed to create account"
+    );
+  }
+};
 
   return (
     <>
@@ -47,6 +70,7 @@ export function SignUp() {
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
+
 
             <input
               className="auth-input"
@@ -71,7 +95,7 @@ export function SignUp() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
-
+            {error && <div className="auth-error">{error}</div>}
             <button className="auth-button" type="submit">
               Sign Up
             </button>
