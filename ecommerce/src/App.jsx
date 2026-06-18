@@ -16,16 +16,30 @@ import { getAuthHeaders } from "./utils/auth";
 window.axios = axios;
 function App() {
   const [cart, setCart] = useState([]);
-  const loadCart = async () => {
-    const response = await axios.get("/api/cart-items?expand=product", {
-      headers: getAuthHeaders(),
-    });
+const loadCart = async () => {
+  const token = localStorage.getItem("token");
 
-    setCart(response.data);
-  };
-  useEffect(() => {
+  if (!token) {
+    setCart([]);
+    return;
+  }
+
+  const response = await axios.get(
+    "/api/cart-items?expand=product",
+    {
+      headers: getAuthHeaders(),
+    }
+  );
+
+  setCart(response.data);
+};
+useEffect(() => {
+  const token = localStorage.getItem("token");
+
+  if (token) {
     loadCart();
-  }, []);
+  }
+}, []);
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
