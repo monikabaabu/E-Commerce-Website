@@ -1,6 +1,6 @@
 import { formatMoney } from "../../utils/money";
 import axios from "axios";
-import {useNavigate} from "react-router";
+import { useNavigate } from "react-router";
 export function PaymentSummary({ paymentSummary, loadCart }) {
   const navigate = useNavigate();
   const createOrder = async () => {
@@ -48,8 +48,10 @@ export function PaymentSummary({ paymentSummary, loadCart }) {
             </div>
           </div>
 
-          <button className="place-order-button button-primary"
-          onClick={createOrder}>
+          <button
+            className="place-order-button button-primary"
+            onClick={createOrder}
+          >
             Place your order
           </button>
         </>

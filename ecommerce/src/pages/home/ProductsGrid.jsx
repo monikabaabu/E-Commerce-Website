@@ -3,8 +3,9 @@ import { Product } from "./Product";
 export function ProductsGrid({
   products,
   loadCart,
+  wishlistIds,
   isWishlistPage,
-  loadWishlist
+  loadWishlist,
 }) {
   return (
     <div className="products-grid">
@@ -14,8 +15,10 @@ export function ProductsGrid({
             key={product.id}
             product={product}
             loadCart={loadCart}
+            wishlistIds={wishlistIds}
             isWishlistPage={isWishlistPage}
             loadWishlist={loadWishlist}
+            
           />
         );
       })}

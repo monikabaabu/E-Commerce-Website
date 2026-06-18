@@ -52,11 +52,8 @@ export function Header({ cart }) {
         <NavLink className="nav-link header-link" to="/home">
           <span className="orders-text">Home</span>
         </NavLink>
-        <NavLink
-        className="nav-link header-link"
-        to="/wishlist"
-        >
-        <span className="nav-text">Wishlist</span>
+        <NavLink className="nav-link header-link" to="/wishlist">
+          <span className="nav-text">Wishlist</span>
         </NavLink>
 
         <NavLink className="nav-link header-link" to="/orders">

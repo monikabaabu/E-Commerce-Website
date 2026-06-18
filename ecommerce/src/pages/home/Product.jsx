@@ -3,52 +3,40 @@ import { formatMoney } from "../../utils/money";
 import axios from "axios";
 import { getAuthHeaders } from "../../utils/auth";
 import CheckmarkIcon from "../../assets/images/icons/checkmark.png";
-export function Product({ product, loadCart, isWishlistPage, loadWishlist }) {
+export function Product({ product, loadCart, wishlistIds = [], isWishlistPage, loadWishlist }) {
   const [quantity, setQuantity] = useState(1);
   const [showAddedMessage, setShowAddedMessage] = useState(false);
-  const [isWishlisted, setIsWishlisted] = useState(false);
+const [isWishlisted, setIsWishlisted] = useState(
+  wishlistIds?.includes(product.id) || false
+);
   const user = JSON.parse(localStorage.getItem("user") || "null");
 
-  const checkWishlist = async () => {
-    if (!user) return;
-    try {
-      const response = await axios.get(
-        `http://localhost:3000/api/wishlist/${user.id}`,
-        {
-          headers: getAuthHeaders(),
-        },
-      );
-
-      const exists = response.data.some(
-        (item) => item.productId === product.id,
-      );
-
-      setIsWishlisted(exists);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  useEffect(() => {
-    checkWishlist();
-  }, [product.id]);
-
-const addToCart = async () => {
-  await axios.post(
-    "/api/cart-items",
-    {
-      productId: product.id,
-      quantity
-    }
+useEffect(() => {
+  setIsWishlisted(
+    wishlistIds?.includes(product.id) || false
   );
+}, [wishlistIds, product.id]);
 
-  await loadCart();
+  const addToCart = async () => {
+    await axios.post(
+      "/api/cart-items",
+      {
+        productId: product.id,
+        quantity,
+      },
+      {
+        headers: getAuthHeaders(),
+      },
+    );
 
-  setShowAddedMessage(true);
+    await loadCart();
 
-  setTimeout(() => {
-    setShowAddedMessage(false);
-  }, 2000);
-};
+    setShowAddedMessage(true);
+
+    setTimeout(() => {
+      setShowAddedMessage(false);
+    }, 2000);
+  };
   const toggleWishlist = async () => {
     if (!user) return;
     try {
@@ -73,9 +61,6 @@ const addToCart = async () => {
         );
 
         setIsWishlisted(true);
-         if (loadWishlist) {
-    loadWishlist();
-  }
       }
     } catch (error) {
       console.error(error);

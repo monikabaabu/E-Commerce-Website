@@ -5,20 +5,20 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { OrderSummary } from "./OrderSummary";
 import { PaymentSummary } from "./PaymentSummary";
-export function CheckoutPage({ cart , loadCart }) {
+export function CheckoutPage({ cart, loadCart }) {
   const [deliveryOptions, setDeliveryOptions] = useState([]);
   const [paymentSummary, setPaymentSummary] = useState(null);
   useEffect(() => {
-  document.title = "Checkout";
-}, []);
+    document.title = "Checkout";
+  }, []);
   useEffect(() => {
     const fetchCheckoutData = async () => {
-    const response = await axios.get("/api/delivery-options?expand=estimatedDeliveryTime");
-        setDeliveryOptions(response.data);
-   
-  };
+      const response = await axios.get(
+        "/api/delivery-options?expand=estimatedDeliveryTime",
+      );
+      setDeliveryOptions(response.data);
+    };
     fetchCheckoutData();
-  
   }, []);
   useEffect(() => {
     const fetchPaymentSummary = async () => {
@@ -26,19 +26,21 @@ export function CheckoutPage({ cart , loadCart }) {
       setPaymentSummary(response.data);
     };
     fetchPaymentSummary();
-  },[cart]);
+  }, [cart]);
   return (
     <>
-      
       <CheckoutHeader cart={cart} />
 
       <div className="checkout-page">
         <div className="page-title">Review your order</div>
 
         <div className="checkout-grid">
-          <OrderSummary cart={cart} deliveryOptions={deliveryOptions} loadCart={loadCart} />
+          <OrderSummary
+            cart={cart}
+            deliveryOptions={deliveryOptions}
+            loadCart={loadCart}
+          />
           <PaymentSummary paymentSummary={paymentSummary} loadCart={loadCart} />
-          
         </div>
       </div>
     </>

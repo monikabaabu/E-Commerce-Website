@@ -3,9 +3,9 @@ import { AuthHeader } from "../components/AuthHeader";
 import "./LandingPage.css";
 import { useEffect } from "react";
 export function LandingPage() {
-    useEffect(() => {
-  document.title = "Shoppie";
-}, []);
+  useEffect(() => {
+    document.title = "Shoppie";
+  }, []);
   return (
     <>
       <AuthHeader />
@@ -15,8 +15,8 @@ export function LandingPage() {
           <h1>Shop Smarter, Live Better</h1>
 
           <p>
-            Discover thousands of products at the
-            best prices with fast and secure checkout.
+            Discover thousands of products at the best prices with fast and
+            secure checkout.
           </p>
 
           <div className="hero-buttons">
