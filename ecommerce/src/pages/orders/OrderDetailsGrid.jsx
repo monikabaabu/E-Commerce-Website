@@ -13,7 +13,7 @@ export function OrderDetailsGrid({ order, loadCart }) {
           await axios.post(
             "/api/cart-items",
             {
-              productId: orderProduct.product.id,
+              productId: orderProduct.product._id,
               quantity: 1,
             },
             {
@@ -23,7 +23,7 @@ export function OrderDetailsGrid({ order, loadCart }) {
           await loadCart();
         };
         return (
-          <Fragment key={orderProduct.product.id}>
+          <Fragment key={orderProduct.product._id}>
             <div className="product-image-container">
               <img src={orderProduct.product.image} alt={orderProduct.product.name} />
             </div>
@@ -47,7 +47,7 @@ export function OrderDetailsGrid({ order, loadCart }) {
             </div>
 
             <div className="product-actions">
-              <Link to={`/tracking/${order.id}/${orderProduct.product.id}`}>
+              <Link to={`/tracking/${order._id}/${orderProduct.product._id}`}>
                 <button className="track-package-button button-secondary">
                   Track package
                 </button>

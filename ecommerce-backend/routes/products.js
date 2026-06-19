@@ -1,31 +1,47 @@
-import express from 'express';
-import { Product } from '../models/Product.js';
+import express from "express";
+import Product from "../models/ProductMongo.js";
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-  const search = req.query.search;
+router.get("/", async (req, res) => {
+  try {
+    const search = req.query.search;
 
-  let products;
-  if (search) {
-    products = await Product.findAll();
+    let products;
 
-    // Filter products by case-insensitive search on name or keywords
-    const lowerCaseSearch = search.toLowerCase();
+    if (search) {
+      const lowerCaseSearch = search.toLowerCase();
 
-    products = products.filter(product => {
-      const nameMatch = product.name.toLowerCase().includes(lowerCaseSearch);
+      products = await Product.find({
+        $or: [
+          {
+            name: {
+              $regex: lowerCaseSearch,
+              $options: "i"
+            }
+          },
+          {
+            keywords: {
+              $elemMatch: {
+                $regex: lowerCaseSearch,
+                $options: "i"
+              }
+            }
+          }
+        ]
+      });
+    } else {
+      products = await Product.find();
+    }
 
-      const keywordsMatch = product.keywords.some(keyword => keyword.toLowerCase().includes(lowerCaseSearch));
+    res.json(products);
+  } catch (error) {
+    console.error(error);
 
-      return nameMatch || keywordsMatch;
+    res.status(500).json({
+      message: "Server error"
     });
-
-  } else {
-    products = await Product.findAll();
   }
-
-  res.json(products);
 });
 
 export default router;

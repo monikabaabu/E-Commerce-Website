@@ -21,12 +21,7 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.7.0",
-    "mysql2": "^3.14.1",
-    "patch-package": "8.0.0",
-    "pg": "^8.16.0",
-    "sequelize": "^6.6.5",
-    "sql.js": "1.10.3",
-    "sql.js-as-sqlite3": "0.2.1"
+    "patch-package": "8.0.0"
   },
   "devDependencies": {
     "archiver": "^7.0.1",

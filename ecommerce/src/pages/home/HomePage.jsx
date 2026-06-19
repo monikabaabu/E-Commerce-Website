@@ -31,14 +31,13 @@ useEffect(() => {
     if (user) {
       requests.push(
         axios.get(
-          `http://localhost:3000/api/wishlist/${user.id}`,
+          "http://localhost:3000/api/wishlist",
           {
             headers: getAuthHeaders()
           }
         )
       );
     }
-
     const responses = await Promise.all(requests);
 
     setProducts(responses[0].data);

@@ -1,91 +1,111 @@
 import express from 'express';
-import { Order } from '../models/Order.js';
-import { Product } from '../models/Product.js';
-import { DeliveryOption } from '../models/DeliveryOption.js';
-import { CartItem } from '../models/CartItem.js';
+import Order from "../models/OrderMongo.js";
+import Product from "../models/ProductMongo.js";
+import DeliveryOption from "../models/DeliveryOptionMongo.js";
+import CartItem from "../models/CartItemMongo.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 router.get('/', authMiddleware, async (req, res) => {
-  const expand = req.query.expand;
-  let orders = await Order.unscoped().findAll({
-    where: {
+  try{
+    const expand = req.query.expand;
+    let orders = await Order.find({
       userId: req.user.userId
-    },
-    order: [['orderTimeMs', 'DESC']]
-  });
-  if (expand === 'products') {
-    orders = await Promise.all(orders.map(async (order) => {
-      const products = await Promise.all(order.products.map(async (product) => {
-        const productDetails = await Product.findByPk(product.productId);
+    }).sort({
+      orderTimeMs: -1 
+    });
+    console.log("ORDERS:", orders);
+    if (expand === 'products') {
+      orders = await Promise.all(orders.map(async (order) => {
+        const products = await Promise.all(order.products.map(async (product) => {
+          const productDetails = await Product.findOne({
+            _id: product.productId
+          }); 
+          return {
+            ...product.toObject(),
+            product: productDetails
+          };
+        }));
+        const orderData = order.toObject();
         return {
-          ...product,
-          product: productDetails
+          ...orderData,
+          products
         };
       }));
-      const orderData = order.toJSON();
-      return {
-        ...orderData,
-        products
-      };
-    }));
-  }
+    }
 
-  res.json(orders);
+    res.json(orders);
+  } catch (error) {
+    console.error("ORDERS GET ERROR:", error);
+    res.status(500).json({
+      error: error.message
+    });
+  }
 });
 
+
 router.post('/', authMiddleware, async (req, res) => {
-  const userId = req.user.userId;
-  const cartItems = await CartItem.findAll({
-    where: {
+  try{
+    const userId = req.user.userId;
+    const cartItems = await CartItem.find({
       userId
+    });
+    console.log("ORDER CART ITEMS:", cartItems);
+    if (cartItems.length === 0) {
+      return res.status(400).json({ error: 'Cart is empty' });
     }
-  });
 
-  if (cartItems.length === 0) {
-    return res.status(400).json({ error: 'Cart is empty' });
+    let totalCostCents = 0;
+    const products = await Promise.all(cartItems.map(async (item) => {
+      const product = await Product.findOne({_id: item.productId});
+      if (!product) {
+        throw new Error(`Product not found: ${item.productId}`);
+      }
+      const deliveryOption = await DeliveryOption.findOne({_id: item.deliveryOptionId});
+      if (!deliveryOption) {
+        throw new Error(`Invalid delivery option: ${item.deliveryOptionId}`);
+      }
+      const productCost = product.priceCents * item.quantity;
+      const shippingCost = deliveryOption.priceCents;
+      totalCostCents += productCost + shippingCost;
+      const estimatedDeliveryTimeMs = Date.now() + deliveryOption.deliveryDays * 24 * 60 * 60 * 1000;
+      return {
+        productId: item.productId,
+        quantity: item.quantity,
+        estimatedDeliveryTimeMs
+      };
+    }));
+
+    totalCostCents = Math.round(totalCostCents * 1.1);
+    console.log("ORDER PRODUCTS:", products);
+    console.log("TOTAL COST:", totalCostCents);
+    const order = await Order.create({
+      userId,
+      orderTimeMs: Date.now(),
+      totalCostCents,
+      products
+    });
+
+    await CartItem.deleteMany({
+      userId
+    });
+
+    res.status(201).json(order);
+
+  } catch (error) {
+    console.error("ORDER POST ERROR:", error);
+
+    res.status(500).json({
+      error: error.message
+    });
   }
-
-  let totalCostCents = 0;
-  const products = await Promise.all(cartItems.map(async (item) => {
-    const product = await Product.findByPk(item.productId);
-    if (!product) {
-      throw new Error(`Product not found: ${item.productId}`);
-    }
-    const deliveryOption = await DeliveryOption.findByPk(item.deliveryOptionId);
-    if (!deliveryOption) {
-      throw new Error(`Invalid delivery option: ${item.deliveryOptionId}`);
-    }
-    const productCost = product.priceCents * item.quantity;
-    const shippingCost = deliveryOption.priceCents;
-    totalCostCents += productCost + shippingCost;
-    const estimatedDeliveryTimeMs = Date.now() + deliveryOption.deliveryDays * 24 * 60 * 60 * 1000;
-    return {
-      productId: item.productId,
-      quantity: item.quantity,
-      estimatedDeliveryTimeMs
-    };
-  }));
-
-  totalCostCents = Math.round(totalCostCents * 1.1);
-
-  const order = await Order.create({
-    userId,
-    orderTimeMs: Date.now(),
-    totalCostCents,
-    products
-  });
-
-  await CartItem.destroy({ where: { userId } });
-
-  res.status(201).json(order);
 });
 
 router.get('/:orderId', authMiddleware, async (req, res) => {
   const { orderId } = req.params;
   const expand = req.query.expand;
 
-  let order = await Order.findByPk(orderId);
+  let order = await Order.findById(orderId);
   if (!order) {
     return res.status(404).json({ error: 'Order not found' });
   }
@@ -96,14 +116,16 @@ router.get('/:orderId', authMiddleware, async (req, res) => {
   }
   if (expand === 'products') {
     const products = await Promise.all(order.products.map(async (product) => {
-      const productDetails = await Product.findByPk(product.productId);
+      const productDetails = await Product.findOne({
+        _id: product.productId
+      });
       return {
-        ...product,
+        ...product.toObject(),
         product: productDetails
       };
     }));
     order = {
-      ...order.toJSON(),
+      ...order.toObject(),
       products
     };
   }

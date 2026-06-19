@@ -4,25 +4,31 @@ import axios from "axios";
 import { getAuthHeaders } from "../../utils/auth";
 import CheckmarkIcon from "../../assets/images/icons/checkmark.png";
 import PropTypes from "prop-types";
-export function Product({ product, loadCart, wishlistIds = [], isWishlistPage, loadWishlist }) {
+export function Product({
+  product,
+  loadCart,
+  wishlistIds = [],
+  isWishlistPage,
+  loadWishlist,
+}) {
+  console.log("RENDERING PRODUCT:", product);
   const [quantity, setQuantity] = useState(1);
   const [showAddedMessage, setShowAddedMessage] = useState(false);
-const [isWishlisted, setIsWishlisted] = useState(
-  wishlistIds?.includes(product.id) || false
-);
+  const [isWishlisted, setIsWishlisted] = useState(
+    wishlistIds?.includes(product._id) || false,
+  );
   const user = JSON.parse(localStorage.getItem("user") || "null");
 
-useEffect(() => {
-  setIsWishlisted(
-    wishlistIds?.includes(product.id) || false
-  );
-}, [wishlistIds, product.id]);
+  useEffect(() => {
+    setIsWishlisted(wishlistIds?.includes(product._id) || false);
+  }, [wishlistIds, product._id]);
 
   const addToCart = async () => {
+    console.log("PRODUCT OBJECT:", product);
     await axios.post(
       "/api/cart-items",
       {
-        productId: product.id,
+        productId: product.id || product._id,
         quantity,
       },
       {
@@ -44,7 +50,7 @@ useEffect(() => {
       if (isWishlisted) {
         await axios.delete("http://localhost:3000/api/wishlist", {
           data: {
-            productId: product.id,
+            productId: product._id,
           },
           headers: getAuthHeaders(),
         });
@@ -54,7 +60,7 @@ useEffect(() => {
         await axios.post(
           "http://localhost:3000/api/wishlist",
           {
-            productId: product.id,
+            productId: product._id,
           },
           {
             headers: getAuthHeaders(),
@@ -71,7 +77,7 @@ useEffect(() => {
     if (!user) return;
     await axios.delete("http://localhost:3000/api/wishlist", {
       data: {
-        productId: product.id,
+        productId: product._id,
       },
       headers: getAuthHeaders(),
     });
@@ -85,14 +91,20 @@ useEffect(() => {
     const quantitySelected = Number(event.target.value);
     setQuantity(quantitySelected);
   };
+  console.log(
+  `http://localhost:3000/${product.image}`
+);
   return (
     <div className="product-container" data-testid="product-container">
       <div className="product-image-container">
+
         <img
           className="product-image"
           data-testid="product-image"
-          src={product.image}
+          src={`http://localhost:3000/${product.image}`}
           alt={product.name}
+          onLoad={() => console.log("IMAGE LOADED")}
+  onError={() => console.log("IMAGE FAILED")}
         />
       </div>
 
@@ -133,8 +145,7 @@ useEffect(() => {
         className="added-to-cart"
         style={{ opacity: showAddedMessage ? 1 : 0 }}
       >
-        <img src={CheckmarkIcon} alt=""/>{" "}
-        Added
+        <img src={CheckmarkIcon} alt="" /> Added
       </div>
 
       <div className="product-actions">
@@ -164,5 +175,5 @@ Product.propTypes = {
   loadCart: PropTypes.func.isRequired,
   wishlistIds: PropTypes.array,
   isWishlistPage: PropTypes.bool,
-  loadWishlist: PropTypes.func
-}
+  loadWishlist: PropTypes.func,
+};

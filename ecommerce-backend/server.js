@@ -7,15 +7,16 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import fs from "node:fs";
 
-import { sequelize } from "./models/index.js";
-import { Product } from "./models/Product.js";
-import { DeliveryOption } from "./models/DeliveryOption.js";
+
+import Product from "./models/ProductMongo.js";
+import DeliveryOption from "./models/DeliveryOptionMongo.js";
+
 
 import productRoutes from "./routes/products.js";
 import deliveryOptionRoutes from "./routes/deliveryOptions.js";
 import cartItemRoutes from "./routes/cartItems.js";
 import orderRoutes from "./routes/orders.js";
-import resetRoutes from "./routes/reset.js";
+
 import paymentSummaryRoutes from "./routes/paymentSummary.js";
 import wishlistRoutes from "./routes/wishlist.js";
 import authRoutes from "./routes/auth.js";
@@ -52,7 +53,7 @@ app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/delivery-options", deliveryOptionRoutes);
 app.use("/api/cart-items", cartItemRoutes);
 app.use("/api/orders", orderRoutes);
-app.use("/api/reset", resetRoutes);
+
 app.use("/api/payment-summary", paymentSummaryRoutes);
 
 // Static frontend
@@ -80,10 +81,10 @@ app.use((err, req, res, next) => {
 /* eslint-enable no-unused-vars */
 
 // Sync SQLite database
-await sequelize.sync();
+
 
 // Seed default products & delivery options
-const productCount = await Product.count();
+const productCount = await Product.countDocuments();
 
 if (productCount === 0) {
   const timestamp = Date.now();
@@ -103,8 +104,9 @@ if (productCount === 0) {
       updatedAt: new Date(timestamp + index)
     }));
 
-  await Product.bulkCreate(productsWithTimestamps);
-  await DeliveryOption.bulkCreate(
+  await Product.insertMany(productsWithTimestamps);
+
+  await DeliveryOption.insertMany(
     deliveryOptionsWithTimestamps
   );
 

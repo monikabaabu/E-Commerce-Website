@@ -17,14 +17,14 @@ export function OrderHeader({ order }) {
 
       <div className="order-header-right-section">
         <div className="order-header-label">Order ID:</div>
-        <div>{order.id}</div>
+        <div>{order._id}</div>
       </div>
     </div>
   );
 }
 OrderHeader.propTypes = {
   order: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    _id: PropTypes.string.isRequired,
     orderTimeMs: PropTypes.number.isRequired,
     totalCostCents: PropTypes.number.isRequired
   }).isRequired

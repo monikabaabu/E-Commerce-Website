@@ -51,18 +51,25 @@ export function TrackingPage({ cart }) {
             View all orders
           </Link>
 
-          <div className="delivery-date">
-            Arriving on{" "}
-            {dayjs(orderProduct.estimatedDeliveryTimeMs).format("dddd, MMMM D")}
-            {deliveryPercent >= 100 ? " (Delivered)" : "Arriving on"}
-            {dayjs(orderProduct.estimatedDeliveryTimeMs).format("dddd, MMMM D")}
-          </div>
+      <div className="delivery-date">
+        {deliveryPercent >= 100
+          ? `Delivered on ${dayjs(
+              orderProduct.estimatedDeliveryTimeMs
+            ).format("dddd, MMMM D")}`
+          : `Arriving on ${dayjs(
+              orderProduct.estimatedDeliveryTimeMs
+            ).format("dddd, MMMM D")}`}
+      </div>
 
           <div className="product-info">{orderProduct.product.name}</div>
 
           <div className="product-info">Quantity: {orderProduct.quantity}</div>
 
-          <img className="product-image" src={orderProduct.product.image} alt={orderProduct.product.name} />
+          <img
+            className="product-image"
+            src={`http://localhost:3000/${orderProduct.product.image}`}
+            alt={orderProduct.product.name}
+          />
 
           <div className="progress-labels-container">
             <div

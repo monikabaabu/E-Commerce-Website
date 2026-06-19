@@ -1,7 +1,7 @@
 import express from "express";
-import { CartItem } from "../models/CartItem.js";
-import { Product } from "../models/Product.js";
-import { DeliveryOption } from "../models/DeliveryOption.js";
+import CartItem from "../models/CartItemMongo.js";
+import Product from "../models/ProductMongo.js";
+import DeliveryOption from "../models/DeliveryOptionMongo.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -9,16 +9,16 @@ const router = express.Router();
 router.get("/", authMiddleware, async (req, res) => {
   const expand = req.query.expand;
 
-  let cartItems = await CartItem.findAll({
-    where: {
-      userId: req.user.userId
-    }
+  let cartItems = await CartItem.find({
+    userId: req.user.userId
   });
 
   if (expand === "product") {
     cartItems = await Promise.all(
       cartItems.map(async (item) => {
-        const product = await Product.findByPk(item.productId);
+        const product = await Product.findOne({
+          _id: item.productId
+        });
         const itemData = item.toJSON();
         return {
           ...itemData,
@@ -32,58 +32,73 @@ router.get("/", authMiddleware, async (req, res) => {
 });
 
 router.post("/", authMiddleware, async (req, res) => {
-  const userId = req.user.userId;
-  const { productId, quantity } = req.body;
+  try{
+    const userId = req.user.userId;
+    const { productId, quantity } = req.body;
+    console.log("BODY:", req.body);
+    console.log("PRODUCT ID:", productId);
 
-  const product = await Product.findByPk(productId);
-
-  if (!product) {
-    return res.status(400).json({
-      error: "Product not found"
+    const product = await Product.findOne({
+      _id: productId
     });
-  }
 
-  if (
-    typeof quantity !== "number" ||
-    quantity < 1 ||
-    quantity > 10
-  ) {
-    return res.status(400).json({
-      error: "Quantity must be a number between 1 and 10"
-    });
-  }
+    console.log("PRODUCT:", product);
 
-  let cartItem = await CartItem.findOne({
-    where: {
+    if (!product) {
+      return res.status(400).json({
+        error: "Product not found"
+      });
+    }
+
+    if (
+      typeof quantity !== "number" ||
+      quantity < 1 ||
+      quantity > 10
+    ) {
+      return res.status(400).json({
+        error: "Quantity must be a number between 1 and 10"
+      });
+    }
+    console.log("USER ID:", userId);
+    console.log("SEARCHING CART ITEM...");
+
+    let cartItem = await CartItem.findOne({
       userId,
       productId
+    });
+    
+    console.log("FOUND CART ITEM:", cartItem);
+    if (cartItem) {
+      cartItem.quantity += quantity;
+      await cartItem.save();
+    } else {
+      console.log("CREATING CART ITEM...");
+      cartItem = await CartItem.create({
+        userId,
+        productId,
+        quantity,
+        deliveryOptionId: "1"
+      });
     }
-  });
 
-  if (cartItem) {
-    cartItem.quantity += quantity;
-    await cartItem.save();
-  } else {
-    cartItem = await CartItem.create({
-      userId,
-      productId,
-      quantity,
-      deliveryOptionId: "1"
+    res.status(201).json(cartItem);
+  } catch (error) {
+    console.error("CART ERROR:", error);
+
+    res.status(500).json({
+      error: error.message
     });
   }
-
-  res.status(201).json(cartItem);
 });
+
 
 router.put("/:productId", authMiddleware, async (req, res) => {
   const { productId } = req.params;
   const { quantity, deliveryOptionId } = req.body;
 
   const cartItem = await CartItem.findOne({
-    where: {
-      userId: req.user.userId,
-      productId
-    }
+    userId: req.user.userId,
+    productId
   });
 
   if (!cartItem) {
@@ -107,7 +122,9 @@ router.put("/:productId", authMiddleware, async (req, res) => {
 
   if (deliveryOptionId !== undefined) {
     const deliveryOption =
-      await DeliveryOption.findByPk(deliveryOptionId);
+      await DeliveryOption.findOne({
+        _id: deliveryOptionId
+      });
 
     if (!deliveryOption) {
       return res.status(400).json({
@@ -127,10 +144,8 @@ router.delete("/:productId", authMiddleware, async (req, res) => {
   const { productId } = req.params;
 
   const cartItem = await CartItem.findOne({
-    where: {
-      userId: req.user.userId,
-      productId
-    }
+    userId: req.user.userId,
+    productId
   });
 
   if (!cartItem) {
@@ -139,7 +154,7 @@ router.delete("/:productId", authMiddleware, async (req, res) => {
     });
   }
 
-  await cartItem.destroy();
+  await cartItem.deleteOne();
 
   res.status(204).send();
 });

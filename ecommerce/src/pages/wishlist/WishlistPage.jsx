@@ -16,13 +16,12 @@ export function WishlistPage({ cart, loadCart }) {
       localStorage.getItem("user")
     );
 
- const wishlistResponse = await axios.get(
-  `http://localhost:3000/api/wishlist/${user.id}`,
-  {
-    headers: getAuthHeaders()
-  }
-);
-
+  const wishlistResponse = await axios.get(
+    "http://localhost:3000/api/wishlist",
+    {
+      headers: getAuthHeaders()
+    }
+  );
     const productsResponse = await axios.get(
       "/api/products"
     );
@@ -30,13 +29,16 @@ export function WishlistPage({ cart, loadCart }) {
     const filteredProducts =
       productsResponse.data.filter(product =>
         wishlistResponse.data.some(
-          item => item.productId === product.id
+          item => item.productId === product._id
         )
       );
+    console.log("Wishlist:", wishlistResponse.data);
+    console.log("Products:", productsResponse.data);
+    console.log("Filtered:", filteredProducts);     
 
     setWishlistProducts(filteredProducts);
   };
-
+console.log("wishlistProducts state:", wishlistProducts);
   return (
     <>
       <Header cart={cart} />

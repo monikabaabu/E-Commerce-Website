@@ -12,7 +12,7 @@ export function ProductsGrid({
       {products.map((product) => {
         return (
           <Product
-            key={product.id}
+            key={product._id || product.id}
             product={product}
             loadCart={loadCart}
             wishlistIds={wishlistIds}
