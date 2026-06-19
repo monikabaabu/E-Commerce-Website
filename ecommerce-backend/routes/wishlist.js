@@ -6,7 +6,7 @@ const router = express.Router();
 router.post("/", authMiddleware, async (req, res) => {
   const userId = req.user.userId;
   const { productId } = req.body;
-  console.log("WISHLIST BODY:", req.body);
+ 
   const existing = await Wishlist.findOne({
     userId,
     productId

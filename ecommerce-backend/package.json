@@ -20,8 +20,7 @@
     "dotenv": "^17.4.2",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.7.0",
-    "patch-package": "8.0.0"
+    "mongoose": "^9.7.0"
   },
   "devDependencies": {
     "archiver": "^7.0.1",

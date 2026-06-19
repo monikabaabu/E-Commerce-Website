@@ -12,9 +12,7 @@ export function WishlistPage({ cart, loadCart }) {
   }, []);
 
   const loadWishlist = async () => {
-    const user = JSON.parse(
-      localStorage.getItem("user")
-    );
+
 
   const wishlistResponse = await axios.get(
     "http://localhost:3000/api/wishlist",
@@ -32,13 +30,11 @@ export function WishlistPage({ cart, loadCart }) {
           item => item.productId === product._id
         )
       );
-    console.log("Wishlist:", wishlistResponse.data);
-    console.log("Products:", productsResponse.data);
-    console.log("Filtered:", filteredProducts);     
+    
 
     setWishlistProducts(filteredProducts);
   };
-console.log("wishlistProducts state:", wishlistProducts);
+
   return (
     <>
       <Header cart={cart} />

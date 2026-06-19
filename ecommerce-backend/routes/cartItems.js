@@ -35,14 +35,10 @@ router.post("/", authMiddleware, async (req, res) => {
   try{
     const userId = req.user.userId;
     const { productId, quantity } = req.body;
-    console.log("BODY:", req.body);
-    console.log("PRODUCT ID:", productId);
 
     const product = await Product.findOne({
       _id: productId
     });
-
-    console.log("PRODUCT:", product);
 
     if (!product) {
       return res.status(400).json({
@@ -59,20 +55,18 @@ router.post("/", authMiddleware, async (req, res) => {
         error: "Quantity must be a number between 1 and 10"
       });
     }
-    console.log("USER ID:", userId);
-    console.log("SEARCHING CART ITEM...");
+  
 
     let cartItem = await CartItem.findOne({
       userId,
       productId
     });
-    
-    console.log("FOUND CART ITEM:", cartItem);
+
     if (cartItem) {
       cartItem.quantity += quantity;
       await cartItem.save();
     } else {
-      console.log("CREATING CART ITEM...");
+  
       cartItem = await CartItem.create({
         userId,
         productId,

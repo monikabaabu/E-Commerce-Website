@@ -11,7 +11,7 @@ export function Product({
   isWishlistPage,
   loadWishlist,
 }) {
-  console.log("RENDERING PRODUCT:", product);
+
   const [quantity, setQuantity] = useState(1);
   const [showAddedMessage, setShowAddedMessage] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(
@@ -24,7 +24,6 @@ export function Product({
   }, [wishlistIds, product._id]);
 
   const addToCart = async () => {
-    console.log("PRODUCT OBJECT:", product);
     await axios.post(
       "/api/cart-items",
       {
@@ -91,9 +90,6 @@ export function Product({
     const quantitySelected = Number(event.target.value);
     setQuantity(quantitySelected);
   };
-  console.log(
-  `http://localhost:3000/${product.image}`
-);
   return (
     <div className="product-container" data-testid="product-container">
       <div className="product-image-container">
@@ -103,8 +99,6 @@ export function Product({
           data-testid="product-image"
           src={`http://localhost:3000/${product.image}`}
           alt={product.name}
-          onLoad={() => console.log("IMAGE LOADED")}
-  onError={() => console.log("IMAGE FAILED")}
         />
       </div>
 

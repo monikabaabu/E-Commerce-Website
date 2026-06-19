@@ -14,7 +14,7 @@ router.get('/', authMiddleware, async (req, res) => {
     }).sort({
       orderTimeMs: -1 
     });
-    console.log("ORDERS:", orders);
+   
     if (expand === 'products') {
       orders = await Promise.all(orders.map(async (order) => {
         const products = await Promise.all(order.products.map(async (product) => {
@@ -50,7 +50,7 @@ router.post('/', authMiddleware, async (req, res) => {
     const cartItems = await CartItem.find({
       userId
     });
-    console.log("ORDER CART ITEMS:", cartItems);
+  
     if (cartItems.length === 0) {
       return res.status(400).json({ error: 'Cart is empty' });
     }
@@ -77,8 +77,7 @@ router.post('/', authMiddleware, async (req, res) => {
     }));
 
     totalCostCents = Math.round(totalCostCents * 1.1);
-    console.log("ORDER PRODUCTS:", products);
-    console.log("TOTAL COST:", totalCostCents);
+
     const order = await Order.create({
       userId,
       orderTimeMs: Date.now(),
@@ -102,35 +101,43 @@ router.post('/', authMiddleware, async (req, res) => {
 });
 
 router.get('/:orderId', authMiddleware, async (req, res) => {
-  const { orderId } = req.params;
-  const expand = req.query.expand;
+  try{
+    const { orderId } = req.params;
+    const expand = req.query.expand;
 
-  let order = await Order.findById(orderId);
-  if (!order) {
-    return res.status(404).json({ error: 'Order not found' });
-  }
-  if (order.userId !== req.user.userId) {
-    return res.status(403).json({
-      error: 'Unauthorized'
+    let order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+    if (order.userId !== req.user.userId) {
+      return res.status(403).json({
+        error: 'Unauthorized'
+      });
+    }
+    if (expand === 'products') {
+      const products = await Promise.all(order.products.map(async (product) => {
+        const productDetails = await Product.findOne({
+          _id: product.productId
+        });
+        return {
+          ...product.toObject(),
+          product: productDetails
+        };
+      }));
+      order = {
+        ...order.toObject(),
+        products
+      };
+    }
+
+    res.json(order);
+  } catch (error) {
+    console.error("ORDER DETAILS ERROR:", error);
+
+    res.status(500).json({
+      error: error.message
     });
   }
-  if (expand === 'products') {
-    const products = await Promise.all(order.products.map(async (product) => {
-      const productDetails = await Product.findOne({
-        _id: product.productId
-      });
-      return {
-        ...product.toObject(),
-        product: productDetails
-      };
-    }));
-    order = {
-      ...order.toObject(),
-      products
-    };
-  }
-
-  res.json(order);
 });
 
 export default router;

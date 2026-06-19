@@ -34,7 +34,6 @@ archive.glob('**/*', {
   dot: true, // Include files that start with a dot
   ignore: [
     'node_modules/**', // Exclude node_modules
-    'database.sqlite', // Exclude database.sqlite
     `${zipFilePrefix}*.zip` // Exclude previous zip files
   ]
 });
