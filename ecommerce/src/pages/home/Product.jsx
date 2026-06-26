@@ -47,7 +47,7 @@ export function Product({
     if (!user) return;
     try {
       if (isWishlisted) {
-        await axios.delete("http://localhost:3000/api/wishlist", {
+        await axios.delete("/api/wishlist", {
           data: {
             productId: product._id,
           },
@@ -57,7 +57,7 @@ export function Product({
         setIsWishlisted(false);
       } else {
         await axios.post(
-          "http://localhost:3000/api/wishlist",
+          "/api/wishlist",
           {
             productId: product._id,
           },
@@ -74,7 +74,7 @@ export function Product({
   };
   const removeFromWishlist = async () => {
     if (!user) return;
-    await axios.delete("http://localhost:3000/api/wishlist", {
+    await axios.delete("/api/wishlist", {
       data: {
         productId: product._id,
       },
@@ -97,7 +97,7 @@ export function Product({
         <img
           className="product-image"
           data-testid="product-image"
-          src={`http://localhost:3000/${product.image}`}
+          src={`/${product.image}`}
           alt={product.name}
         />
       </div>

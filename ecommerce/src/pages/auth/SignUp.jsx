@@ -36,7 +36,7 @@ export function SignUp() {
 
   try {
     await axios.post(
-      "http://localhost:3000/api/auth/signup",
+      "/api/auth/signup",
       {
         name,
         email,

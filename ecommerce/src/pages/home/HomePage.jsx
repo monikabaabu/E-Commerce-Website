@@ -31,7 +31,7 @@ useEffect(() => {
     if (user) {
       requests.push(
         axios.get(
-          "http://localhost:3000/api/wishlist",
+          "/api/wishlist",
           {
             headers: getAuthHeaders()
           }

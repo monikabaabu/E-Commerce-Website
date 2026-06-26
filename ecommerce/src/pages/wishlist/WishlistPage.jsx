@@ -15,7 +15,7 @@ export function WishlistPage({ cart, loadCart }) {
 
 
   const wishlistResponse = await axios.get(
-    "http://localhost:3000/api/wishlist",
+    "/api/wishlist",
     {
       headers: getAuthHeaders()
     }
